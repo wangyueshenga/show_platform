@@ -1,19 +1,25 @@
 # 127.0.0.1:1001/hello/
 import os
 import logging
+import logging.config
+import sys
 
-
-from flask import Flask
 global localhost, port, debug
 localhost = '127.0.0.1'
 port = 1001
 debug = True
 
+from flask import Flask
+
+logger = logging.getLogger('flaskLogger')
+logging.config.fileCongfig('config/logging.config')
+
 def create_app(test_config=None):
 	app = Flask(__name__, instance_relative_config=True)
 	app.config.from_mapping(
 		SECRET_KEY='dev',
-		DATABASE=os.path.join(app.instance_path,'flask.sqilte'),)
+		DATABASE=os.path.join(app.instance_path,'flask.sqilte'),
+		)
 	if test_config is None:
 		app.config.from_pyfile('config.py', silent=True)
 	else:
@@ -21,6 +27,7 @@ def create_app(test_config=None):
 	try:
 		os.makedirs(app.instance_path)
 	except OSError as oe:
+
 
 app = Flask("Hello world")
 
